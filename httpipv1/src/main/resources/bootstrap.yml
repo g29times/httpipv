@@ -11,14 +11,17 @@ management:
 spring:
   application:
     name: httpipv1
+  output:
+    ansi:
+      enabled: always
   sleuth:
     web:
       client:
         enabled: true
     sampler:
       probability: 1.0 # 将采样比例设置为 1.0，也就是全部都需要。默认是 0.1
-    zipkin:
-      base-url: http://localhost:9411/ # 指定了 Zipkin 服务器的地址
+#    zipkin:
+#      base-url: http://localhost:9411/ # 指定了 Zipkin 服务器的地址
   profiles:
     active: local
 
@@ -43,6 +46,11 @@ eureka:
 ---
 spring:
   profiles: staging
+  rabbitmq:
+    host: 172.21.16.37
+    port: 5672
+    username: fenji
+    password: fenji2018
 
 eureka:
   instance:
@@ -54,6 +62,11 @@ eureka:
 ---
 spring:
   profiles: prod
+  rabbitmq:
+    host: 172.21.16.42
+    port: 5672
+    username: fenji
+    password: fenji
 
 eureka:
   instance:
