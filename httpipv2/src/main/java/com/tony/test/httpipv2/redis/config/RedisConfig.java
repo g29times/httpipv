@@ -1,4 +1,4 @@
-package com.tony.test.httpipv2.redis;
+package com.tony.test.httpipv2.redis.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

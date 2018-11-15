@@ -1,4 +1,4 @@
-package com.tony.test.httpipv2.redis;
+package com.tony.test.httpipv2.redis.client;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
  */
 public interface RedisAPI {
 
-    // ***** Key
+    // ************************* Key *************************
     boolean exists(String key);
 
     /**
@@ -60,7 +60,7 @@ public interface RedisAPI {
      */
     Object scan(int cursor);
 
-    // ***** String
+    // ************************* String *************************
 
     /**
      * 返回 key 所关联的字符串值。
@@ -97,32 +97,6 @@ public interface RedisAPI {
     void set(String key, Object value);
 
     /**
-     * 将 key 中储存的数字值增一。
-     * <p>
-     * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCR 操作。
-     * <p>
-     * 如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。
-     * <p>
-     * 本操作的值限制在 64 位(bit)有符号数字表示之内。
-     *
-     * @param key
-     * @return
-     */
-    long incr(String key);
-
-    /**
-     * 将 key 中储存的数字值减一。
-     * <p>
-     * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 DECR 操作。
-     *
-     * @param key
-     * @return
-     */
-    long decr(String key);
-
-    long strlen(String key);
-
-    /**
      * 将值 value 关联到 key ，并将 key 的生存时间设为 seconds (以秒为单位)。
      * <p>
      * 如果 key 已经存在， SETEX 命令将覆写旧值。
@@ -154,6 +128,32 @@ public interface RedisAPI {
      * @return
      */
     boolean setnx(String key, Object value, long expireTime, TimeUnit unit);
+
+    /**
+     * 将 key 中储存的数字值增一。
+     * <p>
+     * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCR 操作。
+     * <p>
+     * 如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。
+     * <p>
+     * 本操作的值限制在 64 位(bit)有符号数字表示之内。
+     *
+     * @param key
+     * @return
+     */
+    long incr(String key);
+
+    /**
+     * 将 key 中储存的数字值减一。
+     * <p>
+     * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 DECR 操作。
+     *
+     * @param key
+     * @return
+     */
+    long decr(String key);
+
+    long strlen(String key);
 
     /**
      * 对 key 所储存的字符串值，设置或清除指定偏移量上的位(bit)。
@@ -202,7 +202,7 @@ public interface RedisAPI {
      */
     long bitcount(String key);
 
-    // ***** Hash
+    // ************************* Hash *************************
 
     /**
      * 返回哈希表 key 中给定域 field 的值。
@@ -244,6 +244,13 @@ public interface RedisAPI {
 
     Collection<Object> hvals(String key);
 
+    /**
+     * 详细信息请参考 SCAN 命令。
+     *
+     * @param key
+     * @param type
+     * @return
+     */
     Iterator hscan(String key, String type);
 
     /**
@@ -271,7 +278,7 @@ public interface RedisAPI {
      */
     void hmset(String key, Map map);
 
-    // ***** List
+    // ************************* List *************************
 
     /**
      * 将一个或多个值 value 插入到列表 key 的表头
@@ -413,7 +420,7 @@ public interface RedisAPI {
      */
     void ltrim(String key, int from, int to);
 
-    // ***** Set
+    // ************************* Set *************************
 
     /**
      * 将一个或多个 member 元素加入到集合 key 当中，已经存在于集合的 member 元素将被忽略。
@@ -441,9 +448,15 @@ public interface RedisAPI {
      */
     boolean srem(String key, Object value);
 
+    /**
+     * 详细信息请参考 SCAN 命令。
+     *
+     * @param key
+     * @return
+     */
     Iterator sscan(String key);
 
-    // ***** SortedSet
+    // ************************* SortedSet *************************
 
     /**
      * 将一个或多个 member 元素及其 score 值加入到有序集 key 当中。
@@ -489,9 +502,15 @@ public interface RedisAPI {
      */
     Collection zrange(String key, int start, int stop);
 
+    /**
+     * 详细信息请参考 SCAN 命令。
+     *
+     * @param key
+     * @return
+     */
     Iterator zscan(String key);
 
-    // ***** HyperLogLog
+    // ************************* HyperLogLog *************************
 
     /**
      * 将任意数量的元素添加到指定的 HyperLogLog 里面。

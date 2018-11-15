@@ -1,4 +1,4 @@
-package com.tony.test.httpipv2.redis;
+package com.tony.test.httpipv2.redis.config;
 
 import com.google.gson.Gson;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -22,7 +22,7 @@ public class RedisAop {
 
     private static Logger logger = LoggerFactory.getLogger(RedisAop.class);
 
-    @Pointcut("execution(* com.tony.test.httpipv2.redis.RedisAPI.*(..))")
+    @Pointcut("execution(* com.tony.test.httpipv2.redis.client.RedisAPI.*(..))")
     public void commonPointcut() {
     }
 

@@ -1,4 +1,4 @@
-package com.tony.test.httpipv2.redis;
+package com.tony.test.httpipv2.redis.client;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -41,6 +41,16 @@ public abstract class AbstractRedisAPI implements RedisAPI {
     }
 
     @Override
+    public void setex(String key, Object value, long expireTime, TimeUnit unit) {
+
+    }
+
+    @Override
+    public boolean setnx(String key, Object value, long expireTime, TimeUnit unit) {
+        return false;
+    }
+
+    @Override
     public long incr(String key) {
         return 0;
     }
@@ -53,16 +63,6 @@ public abstract class AbstractRedisAPI implements RedisAPI {
     @Override
     public long strlen(String key) {
         return 0;
-    }
-
-    @Override
-    public void setex(String key, Object value, long expireTime, TimeUnit unit) {
-
-    }
-
-    @Override
-    public boolean setnx(String key, Object value, long expireTime, TimeUnit unit) {
-        return false;
     }
 
     @Override

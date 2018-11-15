@@ -1,4 +1,4 @@
-package com.tony.test.httpipv2.redis;
+package com.tony.test.httpipv2.redis.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;

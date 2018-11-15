@@ -1,14 +1,19 @@
-package com.tony.test.httpipv2.redis;
+package com.tony.test.httpipv2.redis.client.redisson;
 
+import com.tony.test.httpipv2.redis.client.AbstractRedisAPI;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Priority;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
  * https://github.com/redisson/redisson/wiki/11.-Redis%E5%91%BD%E4%BB%A4%E5%92%8CRedisson%E5%AF%B9%E8%B1%A1%E5%8C%B9%E9%85%8D%E5%88%97%E8%A1%A8
  */
+@Primary
+@Priority(value = 0)
 @Service
 public class RedissonAPI extends AbstractRedisAPI {
 
@@ -58,6 +63,16 @@ public class RedissonAPI extends AbstractRedisAPI {
     }
 
     @Override
+    public void setex(String key, Object value, long expireTime, TimeUnit unit) {
+        redissonDoc.getRBucket(key).set(value, expireTime, unit);
+    }
+
+    @Override
+    public boolean setnx(String key, Object value, long expireTime, TimeUnit unit) {
+        return redissonDoc.getRBucket(key).trySet(value, expireTime, unit);
+    }
+
+    @Override
     public long incr(String key) {
         return redissonDoc.getRAtomicLong(key).incrementAndGet();
     }
@@ -70,16 +85,6 @@ public class RedissonAPI extends AbstractRedisAPI {
     @Override
     public long strlen(String key) {
         return redissonDoc.getRBucket(key).size();
-    }
-
-    @Override
-    public void setex(String key, Object value, long expireTime, TimeUnit unit) {
-        redissonDoc.getRBucket(key).set(value, expireTime, unit);
-    }
-
-    @Override
-    public boolean setnx(String key, Object value, long expireTime, TimeUnit unit) {
-        return redissonDoc.getRBucket(key).trySet(value, expireTime, unit);
     }
 
     @Override

@@ -1,11 +1,19 @@
-package com.tony.test.httpipv2.redis;
+package com.tony.test.httpipv2.redis.client.redisson;
 
+import com.tony.test.httpipv2.redis.client.RedisAPI;
+import com.tony.test.httpipv2.redis.client.RedisKeyAPI;
+import com.tony.test.httpipv2.redis.client.RedisProxy;
 import org.junit.jupiter.api.Test;
 import org.redisson.Redisson;
 import org.redisson.api.*;
 import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import static com.tony.test.httpipv2.redis.key.HelloKey.HELLO;
+import static com.tony.test.httpipv2.redis.key.PageRankKey.APP_PAGE_RANK;
+import static com.tony.test.httpipv2.redis.key.PageRankKey.WEB_PAGE_RANK;
+import static com.tony.test.httpipv2.redis.key.StudentKey.STU_CLASS;
 
 /**
  * Redisson的本地直联
@@ -33,23 +41,46 @@ public class RedissonDoc {
                 redissonClient = Redisson.create(config);
             }
             redissonClient.getKeys();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         // 连接本地的 Redis 服务
         System.out.println("Connection to server sucessfully");
         // 查看服务是否运行
         System.out.println("Server is running: " +
                 ((Node) getNodesGroup().getNodes().iterator().next()).ping());
 
-        // 字符串对象操作
+        // ----- String 对象操作
         // 方式1 使用redisson原生操作
         getRBucket("hello").set("world");
         System.out.println(getRBucket("hello").get());
 
-        // 方式2 使用包装类操作
-        RedissonAPI redissonAPI = new RedissonAPI(this);
-        RedisAPI redis = new RedisProxy(redissonAPI);
-        redis.set("hello", "world-api");
-        System.out.println(redis.get("hello"));
+        // 方式2-1 使用包装类操作
+        RedisAPI redis = new RedissonAPI(this);
+        redis.set("helloRedisson", "world Redisson");
+        System.out.println(redis.get("helloRedisson"));
+
+        // 方式2-2 使用代理类包装操作并封装KEY
+        RedisKeyAPI redisKey = new RedisProxy(redis);
+        redisKey.set(HELLO, "world Key");
+        System.out.println(redisKey.get(HELLO));
+
+        // ----- SortedSet 对象操作
+        redis.zadd("page_rank", 10, "google.com");
+        redis.zadd("page_rank", 20, "amazon.com");
+        System.out.println(redisKey.zrange(WEB_PAGE_RANK, 0, 1));
+
+        redisKey.zadd(WEB_PAGE_RANK, 10, "www.google.com");
+        redisKey.zadd(WEB_PAGE_RANK, 20, "www.amazon.com");
+        System.out.println(redisKey.zrange(WEB_PAGE_RANK, 0, 1));
+        redisKey.zadd(APP_PAGE_RANK, 10, "m.google.com");
+        redisKey.zadd(APP_PAGE_RANK, 20, "z.com");
+        System.out.println(redisKey.zrange(APP_PAGE_RANK, 0, 1));
+
+        // ----- Hash 对象操作
+        redisKey.hset(STU_CLASS, "1", "5");
+        redisKey.hset(STU_CLASS, "2", "8");
+        System.out.println(redisKey.hget(STU_CLASS, "1"));
+        System.out.println(redisKey.hget(STU_CLASS, "2"));
     }
 
     /**
